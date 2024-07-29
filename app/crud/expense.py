@@ -1,9 +1,11 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 from app.models.expense import Expense, ExpenseParticipant, SplitType
+from app.models.user import User
 from app.schemas.expense import ExpenseCreate
 from app.schemas.expense import ExpenseParticipant as ExpenseParticipantSchema
 import uuid
+import csv
+from io import StringIO
 from datetime import datetime
 
 def create_expense(db: Session, expense_in: ExpenseCreate, user_id: str):
@@ -64,3 +66,48 @@ def get_user_expenses(db: Session, user_id: str):
 
 def get_all_expenses(db: Session):
     return db.query(Expense).all()
+
+def generate_balance_sheet(db: Session):
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # Write header
+    writer.writerow(['Expense ID', 'Description', 'Amount', 'Split Type', 'Created By', 'Created At'])
+
+    # Fetch all expenses
+    expenses = db.query(Expense).all()
+    for expense in expenses:
+        writer.writerow([
+            expense.id,
+            expense.description,
+            expense.amount,
+            expense.split_type,
+            expense.created_by,
+            expense.created_at
+        ])
+
+    # Fetch individual expenses
+    writer.writerow([])
+    # Write header
+    writer.writerow(['User ID', 'Name', 'Expense ID', 'Amount', 'Percentage'])
+
+    # Fetch all expenses and participants, including user names
+    results = db.query(
+        ExpenseParticipant.user_id,
+        User.name,
+        ExpenseParticipant.expense_id,
+        ExpenseParticipant.amount,
+        ExpenseParticipant.percentage
+    ).join(User, User.id == ExpenseParticipant.user_id).all()
+
+    for result in results:
+        writer.writerow([
+            result.user_id,
+            result.name,
+            result.expense_id,
+            result.amount,
+            result.percentage
+        ])
+
+    output.seek(0)
+    return output.getvalue()
