@@ -32,9 +32,14 @@ This Backend Web-Service is deployed on Render: https://expense-calculator-tlbo.
 - Percentage: Specify the percentage each participant owes (ensuring percentages add up to 100%).
 
 
-## Getting Started
+## Screenshots
+- Create User
+![image](https://github.com/user-attachments/assets/50f0746e-c7fb-4d3b-b104-8c95de149596)
+- Create Expense
+![image](https://github.com/user-attachments/assets/eb53332c-1f0b-43f4-879d-32dcbd4dd23b)
+- Downloaded Balance Sheet
+![image](https://github.com/user-attachments/assets/c8bbc608-c158-4deb-ac03-ce5d8dcd6015)
 
-  
 
 ### Prerequisites
 
@@ -178,8 +183,8 @@ uvicorn app.main:app --reload
 - **Note**: for each instance of {id}, copy the id returned while creating a user. If you're using the deployed version on render, you can use the below two id's
 
 ```
-0a4cc47d-fdfd-498f-95d1-b4432fa2ef17
-9a98a149-16aa-4764-b695-b98e4ef7279b
+78c3a591-6591-49f0-96e4-fde1322fd074
+d3ce59cf-cdd9-4804-b30a-00c22cb94f54
 ```
 
 #### Equal Split
