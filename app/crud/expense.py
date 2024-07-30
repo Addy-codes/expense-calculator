@@ -3,6 +3,7 @@ from app.models.expense import Expense, ExpenseParticipant, SplitType
 from app.models.user import User
 from app.schemas.expense import ExpenseCreate
 from app.schemas.expense import ExpenseParticipant as ExpenseParticipantSchema
+from fastapi import HTTPException
 import uuid
 import csv
 from io import StringIO
@@ -45,6 +46,9 @@ def create_expense(db: Session, expense_in: ExpenseCreate, user_id: str):
             )
             db.add(expense_participant)
     elif expense_in.split_type == SplitType.EXACT:
+        total_split_amount = sum(participant.amount for participant in expense_in.participants)
+        if total_split_amount != total_amount:
+            raise HTTPException(status_code=400, detail="The split amounts do not add up to the total amount.")
         for participant in expense_in.participants:
             expense_participant = ExpenseParticipant(
                 id=str(uuid.uuid4()),
@@ -54,6 +58,9 @@ def create_expense(db: Session, expense_in: ExpenseCreate, user_id: str):
             )
             db.add(expense_participant)
     elif expense_in.split_type == SplitType.PERCENTAGE:
+        total_percentage = sum(participant.percentage for participant in expense_in.participants)
+        if total_percentage != 100:
+            raise HTTPException(status_code=400, detail="The split percentages do not add up to 100%.")
         for participant in expense_in.participants:
             expense_participant = ExpenseParticipant(
                 id=str(uuid.uuid4()),

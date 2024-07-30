@@ -9,7 +9,7 @@ import io
 router = APIRouter()
 
 @router.post("/", response_model=Expense)
-def create_expense_endpoint(
+def create_new_expense(
     expense_in: ExpenseCreate,
     db: Session = Depends(get_db)
 ):

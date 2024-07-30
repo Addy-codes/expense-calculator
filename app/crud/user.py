@@ -31,7 +31,7 @@ def get_user(db: Session, user_id: str):
 
 def create_user(db: Session, user_in: UserCreate):
     """
-    Create a new user.
+    Create a new user with validated email and mobile number.
 
     Args:
         db (Session): The database session.
@@ -39,7 +39,13 @@ def create_user(db: Session, user_in: UserCreate):
 
     Returns:
         User: The created user.
+    
+    Raises:
+        ValueError: If the email or mobile number is invalid.
     """
+    # Validate email and mobile number using Pydantic schema
+    user_in = UserCreate(**user_in.dict())
+
     db_user = User(
         id=str(uuid.uuid4()),
         email=user_in.email,
