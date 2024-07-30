@@ -29,6 +29,12 @@ app.include_router(expense.router, prefix="/api/v1/expenses", tags=["expenses"])
 
 @app.get("/")
 def read_root():
+    """
+    Root endpoint welcoming users to the Daily Expenses Sharing Application API.
+
+    Returns:
+        dict: A welcome message.
+    """
     return {"message": "Welcome to the Daily Expenses Sharing Application API"}
 
 if __name__ == "__main__":

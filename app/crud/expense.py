@@ -9,6 +9,17 @@ from io import StringIO
 from datetime import datetime
 
 def create_expense(db: Session, expense_in: ExpenseCreate, user_id: str):
+    """
+    Create a new expense and distribute the amount among participants based on the split type.
+
+    Args:
+        db (Session): The database session.
+        expense_in (ExpenseCreate): The expense information.
+        user_id (str): The ID of the user who created the expense.
+
+    Returns:
+        Expense: The created expense.
+    """
     print(f"Creating expense with description: {expense_in.description}, amount: {expense_in.amount}, split_type: {expense_in.split_type}")
     print(SplitType.EQUAL)
     expense_id = str(uuid.uuid4())
@@ -59,15 +70,53 @@ def create_expense(db: Session, expense_in: ExpenseCreate, user_id: str):
 
 
 def get_expense(db: Session, expense_id: str):
+    """
+    Retrieve an expense by its ID.
+
+    Args:
+        db (Session): The database session.
+        expense_id (str): The ID of the expense.
+
+    Returns:
+        Expense: The expense details.
+    """
     return db.query(Expense).filter(Expense.id == expense_id).first()
 
 def get_user_expenses(db: Session, user_id: str):
+    """
+    Retrieve all expenses for a specific user.
+
+    Args:
+        db (Session): The database session.
+        user_id (str): The ID of the user.
+
+    Returns:
+        list[Expense]: A list of expenses for the user.
+    """
     return db.query(Expense).join(ExpenseParticipant).filter(ExpenseParticipant.user_id == user_id).all()
 
 def get_all_expenses(db: Session):
+    """
+    Retrieve all expenses.
+
+    Args:
+        db (Session): The database session.
+
+    Returns:
+        list[Expense]: A list of all expenses.
+    """
     return db.query(Expense).all()
 
 def generate_balance_sheet(db: Session):
+    """
+    Generate a balance sheet CSV file containing all expenses and participants' details.
+
+    Args:
+        db (Session): The database session.
+
+    Returns:
+        str: The CSV content as a string.
+    """
     output = StringIO()
     writer = csv.writer(output)
 
