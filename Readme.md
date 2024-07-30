@@ -2,11 +2,10 @@
 
 # Daily Expenses Sharing Application
 
-  
+This project is a Daily Expenses Sharing Application built with FastAPI, SQLAlchemy, SQLite and Docker. It allows users to share and manage daily expenses with ease, providing multiple ways to split expenses and generating balance sheets for download.
 
-This project is a Daily Expenses Sharing Application built with FastAPI, SQLAlchemy, and SQLite. It allows users to share and manage daily expenses with ease, providing multiple ways to split expenses and generating balance sheets for download.
+This Backend Web-Service is deployed on Render: https://expense-calculator-tlbo.onrender.com/docs
 
-  
 
 ## Features
 
@@ -45,7 +44,7 @@ This project is a Daily Expenses Sharing Application built with FastAPI, SQLAlch
 
 - SQLite (included with Python)
 
-  
+- Docker
 
 ### Installation
 
@@ -56,12 +55,39 @@ This project is a Daily Expenses Sharing Application built with FastAPI, SQLAlch
   
 
 ```bash
-
 git clone https://github.com/Addy-codes/expense-calculator.git
-
 cd expense-calculator
+```
+
+
+2. Create a .env file and paste the below text:
 
 ```
+SQLALCHEMY_DATABASE_URL=sqlite:///./test.db
+```
+
+3. Run the service using docker
+
+```bash
+docker build -t daily-expenses-app .
+docker run -d -p 8000:8000 --name daily-expenses-container daily-expenses-app
+```
+
+This command will start a Docker container from the daily-expenses-app image and map port 8000 on your host to port 8000 in the container.
+
+### Manual Installation
+
+  
+
+1. Clone the repository:
+
+  
+
+```bash
+git clone https://github.com/Addy-codes/expense-calculator.git
+cd expense-calculator
+```
+
 
 2. Create a virtual environment and activate it:
 
@@ -78,10 +104,10 @@ pip install -r requirements.txt
 
 ### Database Setup
 
-1. Initialize the database:
+1. Create a .env file and paste the below text:
 
 ```bash
-python -m app.main
+SQLALCHEMY_DATABASE_URL=sqlite:///./test.db
 ```
 
 ### Running the Application
@@ -149,7 +175,12 @@ uvicorn app.main:app --reload
 
 ### Create Expense
 
-- **Note**: for each instance of {id}, copy the id returned while creating a user
+- **Note**: for each instance of {id}, copy the id returned while creating a user. If you're using the deployed version on render, you can use the below two id's
+
+```
+0a4cc47d-fdfd-498f-95d1-b4432fa2ef17
+9a98a149-16aa-4764-b695-b98e4ef7279b
+```
 
 #### Equal Split
 
