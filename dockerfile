@@ -16,8 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project into the container
 COPY . .
 
-# Copy the .env file
-COPY .env /app/.env
+# Check if the .env file exists and copy it if present
+RUN if [ -f .env ]; then cp .env /app/.env; fi
 
 # Expose the port the app runs on
 EXPOSE 8000
